@@ -6,155 +6,53 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>...</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&display=swap');
 
 ```
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  background: #0a0a0a;
-  color: #f0f0f0;
   font-family: 'Space Mono', monospace;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  background: #fff;
+  color: #111;
 }
 
-.container {
-  text-align: center;
-  padding: 2rem;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeIn 0.6s ease forwards 0.2s;
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.label {
-  font-size: 0.7rem;
-  letter-spacing: 0.3em;
-  color: #444;
-  text-transform: uppercase;
-  margin-bottom: 2rem;
+@media (prefers-color-scheme: dark) {
+  body { background: #0a0a0a; color: #f0f0f0; }
 }
 
 .message {
-  font-size: clamp(2rem, 8vw, 5rem);
+  font-size: clamp(2rem, 10vw, 5rem);
   font-weight: 700;
-  line-height: 1.1;
-  color: #f0f0f0;
+  text-align: center;
+  padding: 2rem;
+  opacity: 0;
+  animation: in 0.4s ease forwards 0.1s;
 }
 
-.message.glitch {
-  position: relative;
-  animation: glitch 3s infinite;
-}
-
-.message.glitch::before,
-.message.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  opacity: 0.8;
-}
-
-.message.glitch::before {
-  color: #ff004c;
-  animation: glitch-1 3s infinite;
-  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
-}
-
-.message.glitch::after {
-  color: #00fff9;
-  animation: glitch-2 3s infinite;
-  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
-}
-
-@keyframes glitch {
-  0%, 90%, 100% { transform: none; }
-  92% { transform: skew(-1deg); }
-  94% { transform: skew(1deg); }
-}
-
-@keyframes glitch-1 {
-  0%, 90%, 100% { transform: none; }
-  92% { transform: translate(-3px, 0); }
-  94% { transform: translate(3px, 0); }
-}
-
-@keyframes glitch-2 {
-  0%, 90%, 100% { transform: none; }
-  92% { transform: translate(3px, 0); }
-  94% { transform: translate(-3px, 0); }
-}
-
-.sub {
-  margin-top: 2rem;
-  font-size: 0.75rem;
-  color: #333;
-  letter-spacing: 0.15em;
-}
-
-/* type specific colors */
-body.type-free .message { color: #ffdd57; }
-body.type-getalife .message { color: #ff4757; }
-body.type-grass .message { color: #2ed573; }
-body.type-default .message { color: #747d8c; }
-
-/* scanline effect */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.03) 2px,
-    rgba(0,0,0,0.03) 4px
-  );
-  pointer-events: none;
+@keyframes in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 ```
 
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="label">Developed by kotaaaaaaaa12</div>
-    <div class="message glitch" id="msg"></div>
-    <div class="sub" id="sub"></div>
-  </div>
-
+  <div class="message" id="msg"></div>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const type = params.get('type');
-
+    const type = new URLSearchParams(window.location.search).get('type');
     const eggs = {
-      free: {
-        message: '暇なん？',
-        sub: 'わざわざQRコード読み込んだん？w',
-        bodyClass: 'type-free'
-      },
-      default: {
-        message: 'ここで何してるん？',
-        sub: '何もないで。',
-        bodyClass: 'type-default'
-      }
+      free:    '暇なん？',
+      default: 'ここで何してるん？'
     };
-
-    const egg = eggs[type] ?? eggs.default;
-
-    document.getElementById('msg').textContent = egg.message;
-    document.getElementById('msg').setAttribute('data-text', egg.message);
-    document.getElementById('sub').textContent = egg.sub;
-    document.body.classList.add(egg.bodyClass);
-    document.title = egg.message;
+    const msg = eggs[type] ?? eggs.default;
+    document.getElementById('msg').textContent = msg;
+    document.title = msg;
   </script>
-
 </body>
 </html>
